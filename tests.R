@@ -29,7 +29,7 @@ regr_pps1 = predict_spatial_parts(regr_exp, predictors, maxcell = 20)
 plot(regr_pps1)
 
 regr_pps2 = predict_spatial_parts(regr_exp, predictors, maxcell = 20, type = "shap")
-
+plot(regr_pps2)
 
 raster_obs = predictors
 explainer = regr_exp
