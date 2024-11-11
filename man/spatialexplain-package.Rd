@@ -4,12 +4,12 @@
 \name{spatialexplain-package}
 \alias{spatialexplain}
 \alias{spatialexplain-package}
-\title{spatialexplain: What the Package Does (One Line, Title Case)}
+\title{spatialexplain: Explore and Explain Spatial Machine Learning Models}
 \description{
-What the package does (one paragraph).
+Provides model agnostic tools for exploring and explaining spatial machine learning models. It is based on the 'DALEX' package and uses the 'terra' package for spatial raster data handling.
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Jakub Nowosad \email{nowosad.jakub@gmail.com} (\href{https://orcid.org/0000-0002-1057-3721}{ORCID})
 
 }
 \keyword{internal}

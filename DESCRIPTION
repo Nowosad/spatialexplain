@@ -1,12 +1,16 @@
 Package: spatialexplain
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Title: Explore and Explain Spatial Machine Learning Models
+Version: 0.0.1
+Authors@R: c(
+    person(given = "Jakub", family = "Nowosad", 
+    role = c("aut", "cre"),
+    email = "nowosad.jakub@gmail.com", 
+    comment = c(ORCID = "0000-0002-1057-3721"))
+    )
+Description: Provides model agnostic tools for exploring and explaining
+  spatial machine learning models. It is based on the 'DALEX' package and 
+  uses the 'terra' package for spatial raster data handling.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
