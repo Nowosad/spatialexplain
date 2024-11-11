@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict_spatial_parts.R
 \name{predict_spatial_parts}
 \alias{predict_spatial_parts}
-\title{Title}
+\title{Predict spatial parts}
 \usage{
 predict_spatial_parts(
   explainer,
@@ -14,8 +14,17 @@ predict_spatial_parts(
 )
 }
 \arguments{
-\item{type}{}
+\item{explainer}{a model to be explained, preprocessed by the \code{\link[DALEX:explain]{DALEX::explain()}} function}
+
+\item{...}{other parameters that will be passed to \code{\link[iBreakDown:break_down]{iBreakDown::break_down()}}}
+
+\item{N}{the maximum number of observations used for calculation of attributions. By default NULL (use all) or 500 (for oscillations)}
+
+\item{type}{the type of variable attributions. Either \code{shap}, \code{oscillations}, \code{oscillations_uni}, \code{oscillations_emp}, \code{break_down} or \code{break_down_interactions}}
+}
+\value{
+A raster object with the same dimensions as \code{raster_obs}. The number of layers equal to the number of variables in the model or the number of variables in the model plus one if \code{type} is not \code{shap}.
 }
 \description{
-Title
+This function calculates the attributions of the model for each observation in the raster.
 }
