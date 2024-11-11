@@ -16,6 +16,10 @@ predict_spatial_parts(
 \arguments{
 \item{explainer}{a model to be explained, preprocessed by the \code{\link[DALEX:explain]{DALEX::explain()}} function}
 
+\item{raster_obs}{a raster object with the observations to be explained (predictors used in the model)}
+
+\item{maxcell}{the maximum number of cells in the raster. If the number of cells in the raster is greater than \code{maxcell}, the function will sample \code{maxcell} cells from the raster. By default 1000}
+
 \item{...}{other parameters that will be passed to \code{\link[iBreakDown:break_down]{iBreakDown::break_down()}}}
 
 \item{N}{the maximum number of observations used for calculation of attributions. By default NULL (use all) or 500 (for oscillations)}

@@ -3,8 +3,8 @@
 #' This function calculates the attributions of the model for each observation in the raster.
 #'
 #' @param explainer a model to be explained, preprocessed by the [`DALEX::explain()`] function
-#' @param raster_obs
-#' @param maxcell
+#' @param raster_obs a raster object with the observations to be explained (predictors used in the model)
+#' @param maxcell the maximum number of cells in the raster. If the number of cells in the raster is greater than `maxcell`, the function will sample `maxcell` cells from the raster. By default 1000
 #' @param ... other parameters that will be passed to [`iBreakDown::break_down()`]
 #' @param N the maximum number of observations used for calculation of attributions. By default NULL (use all) or 500 (for oscillations)
 #' @param type the type of variable attributions. Either `shap`, `oscillations`, `oscillations_uni`, `oscillations_emp`, `break_down` or `break_down_interactions`
@@ -21,19 +21,25 @@ predict_spatial_parts = function(explainer, raster_obs, maxcell = 1000, ...,
                                    as.raster = TRUE, warn = FALSE)
   }
   x_df = as.data.frame(raster_obs, na.rm = FALSE)
-  if (type == "shap"){
+  if (type %in% c("shap", "oscillations", "oscillations_uni", "oscillations_emp")){
     result = x_df
-  } else {
+  } else if (type == "break_down") {
     result = cbind(intercept = NA, x_df, prediction = NA)
+  } else if (type == "break_down_interactions"){
+    stop("'break_down_interactions' are not yet implemented", call. = FALSE)
   }
   for (i in seq_len(nrow(x_df))){
     if (stats::complete.cases(x_df[i, ])){
-      pp = DALEX::predict_parts(explainer, new_observation = x_df[i, ], type = type)
+      pp = DALEX::predict_parts(explainer, new_observation = x_df[i, ], ..., N = N, type = type)
       if (type == "shap"){
         pp_mean_contribution = tapply(pp$contribution, pp$variable, mean, na.rm = TRUE)
         pp_df = data.frame(contribution = pp_mean_contribution,
                            variable_name = unique(pp$variable_name),
                            label = unique(pp$label))
+      } else if (type %in% c("oscillations", "oscillations_uni", "oscillations_emp")) {
+        pp_df = data.frame(contribution = pp$oscillations,
+                           variable_name = pp$`_vname_`,
+                           label = NA)
       } else {
         pp_df = data.frame(contribution = pp$contribution,
                            variable_name = pp$variable_name,
@@ -55,6 +61,5 @@ predict_spatial_parts = function(explainer, raster_obs, maxcell = 1000, ...,
   r_result = terra::rast(raster_obs, nlyrs = ncol(result))
   terra::values(r_result) = result
   names(r_result) = names(result)
-  # plot(r_result)
   return(r_result)
 }

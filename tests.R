@@ -28,8 +28,20 @@ devtools::load_all()
 regr_pps1 = predict_spatial_parts(regr_exp, predictors, maxcell = 20)
 plot(regr_pps1)
 
-regr_pps2 = predict_spatial_parts(regr_exp, predictors, maxcell = 20, type = "shap")
+regr_pps2 = predict_spatial_parts(regr_exp, predictors, maxcell = 20, type = "oscillations")
 plot(regr_pps2)
+
+regr_pps3 = predict_spatial_parts(regr_exp, predictors, maxcell = 20, type = "oscillations_uni")
+plot(regr_pps3)
+
+regr_pps4 = predict_spatial_parts(regr_exp, predictors, maxcell = 20, type = "oscillations_emp")
+plot(regr_pps4)
+
+regr_pps5 = predict_spatial_parts(regr_exp, predictors, maxcell = 20, type = "break_down_interactions")
+plot(regr_pps5)
+
+regr_pps6 = predict_spatial_parts(regr_exp, predictors, maxcell = 20, type = "shap")
+plot(regr_pps6)
 
 raster_obs = predictors
 explainer = regr_exp
@@ -40,7 +52,7 @@ if (terra::ncell(raster_obs) > 1.1 * maxcell) {
                                  as.raster = TRUE, warn = FALSE)
 }
 x_df = as.data.frame(raster_obs, na.rm = FALSE)
-if (type == "shap"){
+if (type %in% c("shap", "oscillations")){
   result = x_df
 } else {
   result = cbind(intercept = NA, x_df, pred = NA)
@@ -53,6 +65,10 @@ for (i in seq_len(nrow(x_df))){
       pp_df = data.frame(contribution = pp_mean_contribution,
                          variable_name = unique(pp$variable_name),
                          label = unique(pp$label))
+    } if (type == "oscillations") {
+      pp_df = data.frame(contribution = pp$oscillations,
+                         variable_name = pp$`_vname_`,
+                         label = NA)
     } else {
       pp_df = data.frame(contribution = pp$contribution,
                          variable_name = pp$variable_name,
