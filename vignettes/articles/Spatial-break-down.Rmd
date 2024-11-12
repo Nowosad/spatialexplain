@@ -30,7 +30,9 @@ plot(regr_psp_bd)
 ```
 
 ```{r}
-# regr_psp_bdi = predict_spatial_parts(regr_exp, predictors, maxcell = 100, 
-#                                     type = "break_down_interactions")
-# plot(regr_psp_bdi)
+#| echo: false
+#| eval: false
+regr_psp_bdi = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
+                                    type = "break_down_interactions")
+plot(regr_psp_bdi)
 ```

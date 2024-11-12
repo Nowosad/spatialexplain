@@ -28,10 +28,11 @@ predict_spatial_parts = function(explainer, raster_obs, maxcell = 1000, ...,
   x_df = as.data.frame(raster_obs, na.rm = FALSE)
   if (type %in% c("shap", "oscillations", "oscillations_uni", "oscillations_emp")){
     result = x_df
-  } else if (type == "break_down") {
+  } else if (type %in% c("break_down")) {
     result = cbind(intercept = NA, x_df)
   } else if (type == "break_down_interactions"){
-    stop("'break_down_interactions' are not yet implemented", call. = FALSE)
+    stop("'break_down_interactions' are not yet implemented. Please contact us if you need this feature",
+         call. = FALSE)
   }
   for (i in seq_len(nrow(x_df))){
     if (stats::complete.cases(x_df[i, ])){
