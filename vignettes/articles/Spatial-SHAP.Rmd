@@ -1,0 +1,31 @@
+---
+title: "Spatial SHAP"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spatialexplain)
+library(terra)
+```
+
+```{r}
+predictors = rast("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif")
+plot(predictors, axes = FALSE)
+```
+
+```{r}
+data("regr_exp", package = "spatialexplain")
+regr_exp
+```
+
+```{r}
+regr_psp_shap = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
+                                      type = "shap")
+plot(regr_psp_shap)
+```

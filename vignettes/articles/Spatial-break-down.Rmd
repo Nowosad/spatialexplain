@@ -1,0 +1,36 @@
+---
+title: "Spatial break-down"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spatialexplain)
+library(terra)
+```
+
+```{r}
+predictors = rast("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif")
+plot(predictors, axes = FALSE)
+```
+
+```{r}
+data("regr_exp", package = "spatialexplain")
+regr_exp
+```
+
+```{r}
+regr_psp_bd = predict_spatial_parts(regr_exp, predictors, maxcell = 100)
+plot(regr_psp_bd)
+```
+
+```{r}
+# regr_psp_bdi = predict_spatial_parts(regr_exp, predictors, maxcell = 100, 
+#                                     type = "break_down_interactions")
+# plot(regr_psp_bdi)
+```

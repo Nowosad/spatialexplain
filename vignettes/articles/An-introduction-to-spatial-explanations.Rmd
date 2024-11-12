@@ -1,0 +1,74 @@
+---
+title: "An introduction to spatial explanations"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spatialexplain)
+library(sf)
+library(terra)
+library(rpart)
+library(DALEX)
+```
+
+```{r}
+temp_train = read_sf("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/temp_train.gpkg")
+plot(temp_train)
+
+predictors = rast("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif")
+plot(predictors, axes = FALSE)
+```
+
+```{r}
+temp = extract(predictors, temp_train, ID = FALSE)
+temp_train = cbind(temp_train, temp)
+head(temp_train)
+```
+
+## Regression model
+
+```{r}
+rpart_model = rpart(temp ~ ., data = st_drop_geometry(temp_train))
+rpart_model
+```
+
+```{r}
+regr_exp = explain(rpart_model,
+                   data = st_drop_geometry(temp_train)[-1],
+                   y = temp_train$temp)
+```
+
+```{r}
+regr_pps1 = predict_spatial_parts(regr_exp, predictors, maxcell = 100)
+plot(regr_pps1)
+```
+
+## Classification model
+
+```{r}
+temp_train$temp = cut(temp_train$temp,
+                      breaks = c(-Inf, 17, Inf), labels = c("cold", "hot"))
+```
+
+```{r}
+rpart_model_clas = rpart(temp ~ ., data = st_drop_geometry(temp_train))
+rpart_model_clas
+```
+
+```{r}
+clas_exp = explain(rpart_model_clas,
+                   data = st_drop_geometry(temp_train)[-1],
+                   y = temp_train$temp)
+```
+
+```{r}
+clas_pps1 = predict_spatial_parts(clas_exp, predictors, maxcell = 100)
+plot(clas_pps1)
+```
+

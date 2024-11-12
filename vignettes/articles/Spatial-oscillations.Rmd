@@ -1,0 +1,45 @@
+---
+title: "Spatial oscillations"
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spatialexplain)
+library(terra)
+```
+
+```{r}
+predictors = rast("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif")
+plot(predictors, axes = FALSE)
+```
+
+```{r}
+data("regr_exp", package = "spatialexplain")
+regr_exp
+```
+
+```{r}
+regr_psp_os = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
+                                    type = "oscillations")
+plot(regr_psp_os)
+```
+
+```{r}
+regr_psp_osu = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
+                                     type = "oscillations_uni")
+plot(regr_psp_osu)
+```
+
+```{r}
+regr_psp_ose = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
+                                     type = "oscillations_emp")
+plot(regr_psp_ose)
+```
+
