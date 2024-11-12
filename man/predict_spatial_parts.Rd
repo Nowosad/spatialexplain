@@ -32,3 +32,10 @@ A raster object with the same dimensions as \code{raster_obs}. The number of lay
 \description{
 This function calculates the attributions of the model for each observation in the raster.
 }
+\examples{
+library(terra)
+predictors_agg = rast(system.file("raster/predictors_agg.tif", package = "spatialexplain"))
+data("regr_exp", package = "spatialexplain")
+regr_psp_bd = predict_spatial_parts(regr_exp, predictors_agg, maxcell = 100)
+plot(regr_psp_bd)
+}

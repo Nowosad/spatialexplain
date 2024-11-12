@@ -13,6 +13,11 @@
 #' @export
 #'
 #' @examples
+#' library(terra)
+#' predictors_agg = rast(system.file("raster/predictors_agg.tif", package = "spatialexplain"))
+#' data("regr_exp", package = "spatialexplain")
+#' regr_psp_bd = predict_spatial_parts(regr_exp, predictors_agg, maxcell = 100)
+#' plot(regr_psp_bd)
 predict_spatial_parts = function(explainer, raster_obs, maxcell = 1000, ...,
                                  N = if (substr(type, 1, 4) == "osci") 500 else NULL,
                                  type = "break_down"){
@@ -24,7 +29,7 @@ predict_spatial_parts = function(explainer, raster_obs, maxcell = 1000, ...,
   if (type %in% c("shap", "oscillations", "oscillations_uni", "oscillations_emp")){
     result = x_df
   } else if (type == "break_down") {
-    result = cbind(intercept = NA, x_df, prediction = NA)
+    result = cbind(intercept = NA, x_df)
   } else if (type == "break_down_interactions"){
     stop("'break_down_interactions' are not yet implemented", call. = FALSE)
   }
@@ -45,7 +50,7 @@ predict_spatial_parts = function(explainer, raster_obs, maxcell = 1000, ...,
                            variable_name = pp$variable_name,
                            label = pp$label)
       }
-      pp_df$variable_name = ifelse(pp_df$variable_name == "", "prediction", pp_df$variable_name)
+      # pp_df$variable_name = ifelse(pp_df$variable_name == "", "prediction", pp_df$variable_name)
       pp_df = stats::reshape(pp_df, idvar = "label", timevar = "variable_name", direction = "wide")
       names(pp_df) = gsub("contribution.", "", names(pp_df))
       # pp_df = tidyr::pivot_wider(pp_df, names_from = variable_name, values_from = contribution)

@@ -17,3 +17,9 @@ RoxygenNote: 7.3.2
 Imports:
   terra,
   DALEX
+Suggests:
+  rpart
+Config/Needs/website: rmarkdown
+Depends: 
+    R (>= 2.10)
+LazyData: false
