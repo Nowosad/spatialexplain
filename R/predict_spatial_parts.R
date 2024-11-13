@@ -1,6 +1,10 @@
 #' Predict spatial parts
 #'
-#' This function calculates the attributions of the model for each observation in the raster.
+#' This function calculates the attributions of the model
+#' (Break Down, SHAP, or Oscillations explanations) for each observation in the raster.
+#' Model predictions are decomposed into parts that are attributed for particular variables,
+#' and then the attributions are assigned to the corresponding cells in the raster.
+#' See the documentation of the [`DALEX::predict_parts()`] function for more details.
 #'
 #' @param explainer a model to be explained, preprocessed by the [`DALEX::explain()`] function
 #' @param raster_obs a raster object with the observations to be explained (predictors used in the model)
@@ -11,6 +15,10 @@
 #'
 #' @return A raster object with the same dimensions as `raster_obs`. The number of layers equal to the number of variables in the model or the number of variables in the model plus one if `type` is not `shap`.
 #' @export
+#'
+#' @references Lundberg, S. (2017). A unified approach to interpreting model predictions. arXiv preprint arXiv:1705.07874.
+#' @references Staniak, M., & Biecek, P. (2018). Explanations of model predictions with live and breakDown packages. arXiv preprint arXiv:1804.01955.
+#' @references Biecek, P., & Burzykowski, T. (2021). Explanatory model analysis: explore, explain, and examine predictive models. Chapman and Hall/CRC.
 #'
 #' @examples
 #' library(terra)

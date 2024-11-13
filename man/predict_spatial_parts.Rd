@@ -30,7 +30,11 @@ predict_spatial_parts(
 A raster object with the same dimensions as \code{raster_obs}. The number of layers equal to the number of variables in the model or the number of variables in the model plus one if \code{type} is not \code{shap}.
 }
 \description{
-This function calculates the attributions of the model for each observation in the raster.
+This function calculates the attributions of the model
+(Break Down, SHAP, or Oscillations explanations) for each observation in the raster.
+Model predictions are decomposed into parts that are attributed for particular variables,
+and then the attributions are assigned to the corresponding cells in the raster.
+See the documentation of the \code{\link[DALEX:predict_parts]{DALEX::predict_parts()}} function for more details.
 }
 \examples{
 library(terra)
@@ -38,4 +42,11 @@ predictors_agg = rast(system.file("raster/predictors_agg.tif", package = "spatia
 data("regr_exp", package = "spatialexplain")
 regr_psp_bd = predict_spatial_parts(regr_exp, predictors_agg, maxcell = 100)
 plot(regr_psp_bd)
+}
+\references{
+Lundberg, S. (2017). A unified approach to interpreting model predictions. arXiv preprint arXiv:1705.07874.
+
+Staniak, M., & Biecek, P. (2018). Explanations of model predictions with live and breakDown packages. arXiv preprint arXiv:1804.01955.
+
+Biecek, P., & Burzykowski, T. (2021). Explanatory model analysis: explore, explain, and examine predictive models. Chapman and Hall/CRC.
 }
