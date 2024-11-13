@@ -63,11 +63,11 @@ predict_spatial_parts = function(explainer, raster_obs, maxcell = 1000, ...,
       pp_df = stats::reshape(pp_df, idvar = "label", timevar = "variable_name", direction = "wide")
       names(pp_df) = gsub("contribution.", "", names(pp_df))
       # pp_df = tidyr::pivot_wider(pp_df, names_from = variable_name, values_from = contribution)
-      if ("prediction" %in% colnames(pp_df)){
-        result[i, ] = pp_df[which.max(pp_df$prediction), names(result)]
-      } else {
+      # if ("prediction" %in% colnames(pp_df)){
+      #   result[i, ] = pp_df[which.max(pp_df$prediction), names(result)]
+      # } else {
         result[i, ] = pp_df[, names(result)]
-      }
+      # }
     } else {
       result[i, ] = NA_real_
     }

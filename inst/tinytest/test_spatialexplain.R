@@ -29,3 +29,6 @@ expect_equivalent(terra::global(regr_psp_osu, "mean", na.rm = TRUE)[[1]][[6]],
                   2.375516, tolerance = 0.0001)
 expect_equivalent(terra::global(regr_psp_ose, "mean", na.rm = TRUE)[[1]][[6]],
                   2.146239, tolerance = 0.0001)
+
+# check missing features
+expect_error(predict_spatial_parts(regr_exp, predictors_agg, maxcell = my_maxcell, type = "break_down_interactions"))
