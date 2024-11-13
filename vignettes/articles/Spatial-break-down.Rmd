@@ -24,10 +24,14 @@ data("regr_exp", package = "spatialexplain")
 regr_exp
 ```
 
+
+
 ```{r}
 regr_psp_bd = predict_spatial_parts(regr_exp, predictors, maxcell = 100)
 plot(regr_psp_bd)
 ```
+
+For more explanation of the Break Down method, read the ["Break-down Plots for Additive Attributions"](https://ema.drwhy.ai/breakDown.html) chapter from the [Explanatory Model Analysis](https://ema.drwhy.ai/) book. 
 
 ```{r}
 #| echo: false

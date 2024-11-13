@@ -43,3 +43,4 @@ regr_psp_ose = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
 plot(regr_psp_ose)
 ```
 
+For more explanation of the Oscillations methods, read the ["Ceteris-paribus Oscillations"](https://ema.drwhy.ai/ceterisParibusOscillations.html) chapter from the [Explanatory Model Analysis](https://ema.drwhy.ai/) book. 

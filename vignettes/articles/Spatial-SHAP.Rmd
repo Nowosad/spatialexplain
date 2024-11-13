@@ -29,3 +29,5 @@ regr_psp_shap = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
                                       type = "shap")
 plot(regr_psp_shap)
 ```
+
+For more explanation of the SHAP method, read the ["Shapley Additive Explanations (SHAP) for Average Attributions"](https://ema.drwhy.ai/shapley.html) chapter from the [Explanatory Model Analysis](https://ema.drwhy.ai/) book.
