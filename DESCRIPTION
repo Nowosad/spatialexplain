@@ -14,11 +14,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports:
+Imports: 
   terra,
   DALEX
-Suggests:
-  rpart
+Suggests: 
+  rpart, 
+  tinytest
 Config/Needs/website: rmarkdown
 Depends: 
     R (>= 2.10)
