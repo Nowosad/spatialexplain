@@ -58,7 +58,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Spatial break-down</h1>
+                        <h4 data-toc-skip class="author">Jakub Nowosad</h4>
             
+            <h4 data-toc-skip class="date">2024-11-14</h4>
       
 
       <div class="d-none name"><code>Spatial-break-down.Rmd</code></div>
@@ -66,16 +68,21 @@
 
     
     
+<p>The <strong>spatialexplain</strong> package provides model agnostic tools for exploring and explaining spatial machine learning models. This vignette shows a simple example of how to use it to explain a regression model with the Break Down method.</p>
+<p>Lets start by attaching the necessary packages, reading the predictors raster, and loading the pre-trained regression model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">spatialexplain</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># attaching the necessary packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">spatialexplain</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.7.83</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">predictors</span> <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># reading the predictors raster</span></span>
+<span><span class="va">predictors</span> <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predictors</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Spatial-break-down_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"regr_exp"</span>, package <span class="op">=</span> <span class="st">"spatialexplain"</span><span class="op">)</span></span>
+<p><img src="Spatial-break-down_files/figure-html/setup-1.png" width="700"></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># loading the pre-trained regression model</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"regr_exp"</span>, package <span class="op">=</span> <span class="st">"spatialexplain"</span><span class="op">)</span></span>
 <span><span class="va">regr_exp</span></span>
 <span><span class="co">#&gt; Model label:  rpart </span></span>
 <span><span class="co">#&gt; Model class:  rpart </span></span>
@@ -83,12 +90,16 @@
 <span><span class="co">#&gt;    popdens    coast      dem      ndvi  lst_day lst_night</span></span>
 <span><span class="co">#&gt; 1 0.000000 1.126301 85.90540 0.3656146 24.37792  12.64256</span></span>
 <span><span class="co">#&gt; 2 1.211701 6.743273 75.00126 0.3990190 28.13341  10.70668</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_psp_bd</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<p>Now, we can use the <code><a href="../reference/predict_spatial_parts.html">predict_spatial_parts()</a></code> function to explain the regression model using the Break Down method.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">regr_psp_bd</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>                                    type <span class="op">=</span> <span class="st">"break_down"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_psp_bd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Spatial-break-down_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>For more explanation of the Break Down method, read the <a href="https://ema.drwhy.ai/breakDown.html" class="external-link">“Break-down Plots for Additive Attributions”</a> chapter from the <a href="https://ema.drwhy.ai/" class="external-link">Explanatory Model Analysis</a> book.</p>
-  </main>
+<p><img src="Spatial-break-down_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p>The outcome is a set of raster layers that show the contribution of each predictor to the model prediction. The Break Down method quantifies how each explanatory variable contributes to the model’s average prediction by assessing the impact on the prediction as values of each variable are fixed in sequence. Each of the cells in the raster is the contribution of the predictors to the model prediction. Here, we can see that the intercept of the model is 15.1 for the whole area, and that the variables <code>popdens</code>, <code>coast</code>, and <code>ndvi</code> do not have any influence on the model prediction. On the other hand, the variables <code>dem</code>, <code>lst_day</code>, and <code>lst_night</code> affect the model prediction differently, depending on the location. For example, the <code>dem</code> variable negatively influences the model prediction in the mountainous areas – the higher the elevation, the lower the temperature. On the other hand, lower values of the <code>lst_day</code> and <code>lst_night</code> variables are associated with lower temperatures.</p>
+<p>The Break Down method outcomes can be used to better understand the model’s behavior and to identify the areas where the model is most sensitive to changes in the predictors. On the other hand, it may not be the best method to explain complex models with correlated features. For more explanation of the Break Down method, read the <a href="https://ema.drwhy.ai/breakDown.html" class="external-link">“Break-down Plots for Additive Attributions”</a> chapter from the <a href="https://ema.drwhy.ai/" class="external-link">Explanatory Model Analysis</a> book.</p>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
