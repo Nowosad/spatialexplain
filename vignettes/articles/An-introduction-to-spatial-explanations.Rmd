@@ -1,5 +1,7 @@
 ---
 title: "An introduction to spatial explanations"
+author: Jakub Nowosad
+date: "`r Sys.Date()`"
 ---
 
 ```{r, include = FALSE}
