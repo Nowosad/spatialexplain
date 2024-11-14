@@ -9,13 +9,23 @@ knitr::opts_chunk$set(
 )
 ```
 
+The **spatialexplain** package provides model agnostic tools for exploring and explaining spatial machine learning models. 
+The goal of this vignette is to show the basic workflow of its usage.^[The modeling part of the vignette is very simplified to focus on the **spatialexplain** package capabilities.]
+
+Let's start by attaching the necessary packages.
+
 ```{r setup}
+#| message: false
 library(spatialexplain)
 library(sf)
 library(terra)
 library(rpart)
 library(DALEX)
 ```
+
+Next, we load two spatial datasets.
+The first one is a spatial vector point dataset with annual average air temperature measurements in Celsius for Spain in 2019.
+The second one is a raster dataset with predictors, such as population density (`popdens`), distance to the coast (`coast`), elevation (`dem`), a satellite-based Normalized Difference Vegetation Index (`ndvi`), and annual average composites of the Land Surface Temperature product for day (`lst_day`) and night (`lst_night`).
 
 ```{r}
 temp_train = read_sf("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/temp_train.gpkg")
@@ -25,6 +35,10 @@ predictors = rast("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materia
 plot(predictors, axes = FALSE)
 ```
 
+## Data preparation
+
+To prepare the data for the model, we need to extract the values of the predictors at the locations of the temperature measurements with `extract()`, and then combine them with the temperature measurements with `cbind()`.
+
 ```{r}
 temp = extract(predictors, temp_train, ID = FALSE)
 temp_train = cbind(temp_train, temp)
@@ -33,10 +47,18 @@ head(temp_train)
 
 ## Regression model
 
+Now, we can build models that predict the temperature based on the predictors.
+The first one is a regression model that predicts the temperature in Celsius for the whole area of the `predictors` raster.
+Many modeling methods and R tools can be used to build the model, but in this vignette, we use the `rpart()` function from the **rpart** package, which builds a regression tree model.
+
 ```{r}
 rpart_model = rpart(temp ~ ., data = st_drop_geometry(temp_train))
 rpart_model
 ```
+
+Next, we can use the `explain()` function from the **DALEX** package to create an explainer object for the model.
+Explainer is a universal model wrapper that can be used to explain any model with the same set of tools.^[The **DALEX** package allows explaining models created with **keras**, **parsnip**, **caret**, **mlr**, **H2O**, **xgboost**, and many others. Moreover, its extension **DALEXtra** allows explaining models created with
+**xgboost**, **mlr**, **mlr3**, **tidymodels**, and even Python's **scikit-learn** and **keras** and Java's **h2o**.]
 
 ```{r}
 regr_exp = explain(rpart_model,
@@ -44,22 +66,43 @@ regr_exp = explain(rpart_model,
                    y = temp_train$temp)
 ```
 
+This explainer can be used to check various instance and dataset-level explanations of the model, such as partial dependence plots and feature importance.^[Read the ["Biecek, P., & Burzykowski, T. (2021). Explanatory model analysis: explore, explain, and examine predictive models. Chapman and Hall/CRC.](https://ema.drwhy.ai/) book for more details.]
+However, these methods usually do not inform us about the spatial distribution of the model predictions.
+This is where the **spatialexplain** package comes in.
+It has a function called `predict_spatial_parts()` that can be used to calculate the attributions of the model (Break Down, SHAP, or Oscillations explanations) for each observation in the raster.
+The function requires the explainer object and the predictor's raster.
+Additionally, as the calculation of the attributions can be computationally expensive, the function has a `maxcell` parameter that controls the number of cells in the raster that will be used to get the attributions.
+
 ```{r}
-regr_pps1 = predict_spatial_parts(regr_exp, predictors, maxcell = 100)
+regr_pps1 = predict_spatial_parts(regr_exp, predictors, maxcell = 500)
 plot(regr_pps1)
 ```
 
+By default, the `predict_spatial_parts()` function calculates the Break Down attributions.
+This method quantifies how each explanatory variable contributes to the model's average prediction (the 'intercept') by assessing the impact on the prediction as values of each variable are fixed in sequence.
+Each of the cells in the raster is colored according to the contribution of the predictors to the model prediction.
+Here, we can see that the intercept of the model is 15.1 for the whole area, and that the variables `popdens`, `coast`, and `ndvi` do not have any influence on the model prediction.
+On the other hand, the variables `dem`, `lst_day`, and `lst_night` affect the model prediction differently, depending on the location.
+For example, the `dem` variable has a negative influence on the model prediction in the mountainous areas -- the higher the elevation, the lower the temperature.
+
 ## Classification model
+
+The same workflow can be used for classification models.
+Here, we build a classification model that predicts if the temperature is cold or hot (below or above 17 degrees Celsius).
 
 ```{r}
 temp_train$temp = cut(temp_train$temp,
                       breaks = c(-Inf, 17, Inf), labels = c("cold", "hot"))
 ```
 
+We use the `rpart()` function from the **rpart** package to build a classification tree model.
+
 ```{r}
 rpart_model_clas = rpart(temp ~ ., data = st_drop_geometry(temp_train))
 rpart_model_clas
 ```
+
+Next, we create an explainer object for the classification model -- the code is almost the same as for the regression model, except that we use the classification model here.
 
 ```{r}
 clas_exp = explain(rpart_model_clas,
@@ -67,8 +110,14 @@ clas_exp = explain(rpart_model_clas,
                    y = temp_train$temp)
 ```
 
+Finally, we can calculate the attributions for the classification model using the `predict_spatial_parts()` function.
+
 ```{r}
-clas_pps1 = predict_spatial_parts(clas_exp, predictors, maxcell = 100)
+clas_pps1 = predict_spatial_parts(clas_exp, predictors, maxcell = 500)
 plot(clas_pps1)
 ```
 
+The classification model is much simpler in this case.^[Importantly, we did not consider the quality of the models in this vignette. In the real-world scenario, the model should be validated using cross-validation, and the quality of the model should be assessed using various metrics.]
+The average prediction of the model is `0.292` for the whole area, meaning that the probability of the temperature being hot is `0.292`.
+Then, only the `lst_night` variable has an impact on the model prediction, with the higher values of the variable increasing the probability of the temperature being hot.
+We can find such areas in the south of Spain and along its eastern coast.
