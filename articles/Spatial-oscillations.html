@@ -58,7 +58,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Spatial oscillations</h1>
+                        <h4 data-toc-skip class="author">Jakub Nowosad</h4>
             
+            <h4 data-toc-skip class="date">2024-11-14</h4>
       
 
       <div class="d-none name"><code>Spatial-oscillations.Rmd</code></div>
@@ -66,16 +68,21 @@
 
     
     
+<p>The <strong>spatialexplain</strong> package provides model agnostic tools for exploring and explaining spatial machine learning models. This vignette shows a simple example of how to use it to explain a regression model with the Break Down method.</p>
+<p>Let’s start by attaching the necessary packages, reading the predictors raster, and loading the pre-trained regression model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">spatialexplain</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># attaching the necessary packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">spatialexplain</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.7.83</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">predictors</span> <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># reading the predictors raster</span></span>
+<span><span class="va">predictors</span> <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predictors</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Spatial-oscillations_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"regr_exp"</span>, package <span class="op">=</span> <span class="st">"spatialexplain"</span><span class="op">)</span></span>
+<p><img src="Spatial-oscillations_files/figure-html/setup-1.png" width="700"></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># loading the pre-trained regression model</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"regr_exp"</span>, package <span class="op">=</span> <span class="st">"spatialexplain"</span><span class="op">)</span></span>
 <span><span class="va">regr_exp</span></span>
 <span><span class="co">#&gt; Model label:  rpart </span></span>
 <span><span class="co">#&gt; Model class:  rpart </span></span>
@@ -83,23 +90,30 @@
 <span><span class="co">#&gt;    popdens    coast      dem      ndvi  lst_day lst_night</span></span>
 <span><span class="co">#&gt; 1 0.000000 1.126301 85.90540 0.3656146 24.37792  12.64256</span></span>
 <span><span class="co">#&gt; 2 1.211701 6.743273 75.00126 0.3990190 28.13341  10.70668</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_psp_os</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>                                    type <span class="op">=</span> <span class="st">"oscillations"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_psp_os</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Spatial-oscillations_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_psp_osu</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">100</span>,</span>
+<p>The Oscillations method quantifies how sensitive the model response is for each predictor. For variables that strongly influence a model’s prediction, the outcomes will show large oscillations, and for variables with little or no influence, the oscillations will be small or non-existent.</p>
+<p>Now, we can use the <code><a href="../reference/predict_spatial_parts.html">predict_spatial_parts()</a></code> function to explain the regression model using the Oscillations methods. Three types of the Oscillations method are available: <code>oscillations_uni</code>, <code>oscillations_emp</code>, and <code>oscillations</code>. The first one is the simplest and the fastest, so it may be preferred for quick exploration. The second one uses the empirical distributions of the predictors, and thus it is better for cases when there is enough data to estimate such distributions. The third one, <code>oscillations</code>, aims at more advanced cases in which the user specifies a pre-defined grid of values for continuous predictors; thus, it may not be the most useful for raster explainability, and we are not going to use it here.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># oscillations_uni</span></span>
+<span><span class="va">regr_psp_osu</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>                                     type <span class="op">=</span> <span class="st">"oscillations_uni"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_psp_osu</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Spatial-oscillations_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_psp_ose</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">100</span>,</span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/panel.html" class="external-link">panel</a></span><span class="op">(</span><span class="va">regr_psp_osu</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Spatial-oscillations_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># oscillations_emp</span></span>
+<span><span class="va">regr_psp_ose</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>                                     type <span class="op">=</span> <span class="st">"oscillations_emp"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_psp_ose</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Spatial-oscillations_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<p>For more explanation of the Oscillations methods, read the <a href="https://ema.drwhy.ai/ceterisParibusOscillations.html" class="external-link">“Ceteris-paribus Oscillations”</a> chapter from the <a href="https://ema.drwhy.ai/" class="external-link">Explanatory Model Analysis</a> book.</p>
-  </main>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/panel.html" class="external-link">panel</a></span><span class="op">(</span><span class="va">regr_psp_ose</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Spatial-oscillations_files/figure-html/unnamed-chunk-2-2.png" width="700"></p>
+<p>In this case, both the <code>oscillations_uni</code> and <code>oscillations_emp</code> methods give similar results, suggesting the most importance of the <code>lst_night</code> variable, followed by <code>lst_day</code> and <code>dem</code>. At the same time, we may notice that some areas have higher sensitivity to the <code>lst_night</code> variable (e.g., northern Spain), while others have lower sensitivity (e.g., southern Spain).</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">regr_psp_os</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>                                    type <span class="op">=</span> <span class="st">"oscillations"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/panel.html" class="external-link">panel</a></span><span class="op">(</span><span class="va">regr_psp_os</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Spatial-oscillations_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>Similarly to most other explaination methods, the Oscillations methods are sensitive to the correlation or interactions between the predictors. For more explanation of the Oscillations methods, read the <a href="https://ema.drwhy.ai/ceterisParibusOscillations.html" class="external-link">“Ceteris-paribus Oscillations”</a> chapter from the <a href="https://ema.drwhy.ai/" class="external-link">Explanatory Model Analysis</a> book.</p>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
