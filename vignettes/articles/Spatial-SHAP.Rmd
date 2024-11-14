@@ -1,5 +1,7 @@
 ---
 title: "Spatial SHAP"
+author: Jakub Nowosad
+date: "`r Sys.Date()`"
 ---
 
 ```{r, include = FALSE}
@@ -9,20 +11,27 @@ knitr::opts_chunk$set(
 )
 ```
 
+The **spatialexplain** package provides model agnostic tools for exploring and explaining spatial machine learning models. 
+This vignette shows a simple example of how to use it to explain a regression model with the Break Down method.
+
+Lets start by attaching the necessary packages, reading the predictors raster, and loading the pre-trained regression model.
+
 ```{r setup}
+#| message: false
+# attaching the necessary packages
 library(spatialexplain)
 library(terra)
-```
 
-```{r}
+# reading the predictors raster
 predictors = rast("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif")
 plot(predictors, axes = FALSE)
-```
 
-```{r}
+# loading the pre-trained regression model
 data("regr_exp", package = "spatialexplain")
 regr_exp
 ```
+
+Now, we can use the `predict_spatial_parts()` function to explain the regression model using the SHAP method.
 
 ```{r}
 regr_psp_shap = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
