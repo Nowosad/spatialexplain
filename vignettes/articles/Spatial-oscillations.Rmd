@@ -57,7 +57,7 @@ In this case, both the `oscillations_uni` and `oscillations_emp` methods give si
 At the same time, we may notice that some areas have higher sensitivity to the `lst_night` variable (e.g., northern Spain), while others have lower sensitivity (e.g., southern Spain).
 
 ```{r}
-#| include: true
+#| include: false
 regr_psp_os = predict_spatial_parts(regr_exp, predictors, maxcell = 500,
                                     type = "oscillations")
 panel(regr_psp_os)
