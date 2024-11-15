@@ -31,12 +31,20 @@ data("regr_exp", package = "spatialexplain")
 regr_exp
 ```
 
-Now, we can use the `predict_spatial_parts()` function to explain the regression model using the SHAP method.
+The SHAP method is a model-agnostic method that explains the model's predictions by attributing the prediction to each feature.
+However, as compared to the Break Down method, the SHAP method uses the idea of averaging the value of a variable’s attribution over all or many possible orderings.
+This has two main implications: the SHAP method is computationally more expensive, but its results are less sensitive to the order of the variables.
+This method provides additive feature attribution -- thus, it works best for additive models (e.g., linear regression), and if the model is not additive, the SHAP values may not be meaningful.
+
+We can use the `predict_spatial_parts()` function to explain the regression model using the SHAP method by setting the `type` parameter to `"shap"`.
 
 ```{r}
-regr_psp_shap = predict_spatial_parts(regr_exp, predictors, maxcell = 100,
+regr_psp_shap = predict_spatial_parts(regr_exp, predictors, maxcell = 500,
                                       type = "shap")
 plot(regr_psp_shap)
 ```
+
+The resulting maps show that the `popdens`, `coast`, and `ndvi` variables had no effect on the model's predictions.
+The `dem` variable mostly influenced the results in the mountainous areas, while `lst_day` and `lst_night` had different effects for the south and north parts of Spain.
 
 For more explanation of the SHAP method, read the ["Shapley Additive Explanations (SHAP) for Average Attributions"](https://ema.drwhy.ai/shapley.html) chapter from the [Explanatory Model Analysis](https://ema.drwhy.ai/) book.
