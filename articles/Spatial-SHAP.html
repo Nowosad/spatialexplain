@@ -60,7 +60,7 @@
       <h1>Spatial SHAP</h1>
                         <h4 data-toc-skip class="author">Jakub Nowosad</h4>
             
-            <h4 data-toc-skip class="date">2024-11-14</h4>
+            <h4 data-toc-skip class="date">2024-11-15</h4>
       
 
       <div class="d-none name"><code>Spatial-SHAP.Rmd</code></div>
@@ -90,12 +90,14 @@
 <span><span class="co">#&gt;    popdens    coast      dem      ndvi  lst_day lst_night</span></span>
 <span><span class="co">#&gt; 1 0.000000 1.126301 85.90540 0.3656146 24.37792  12.64256</span></span>
 <span><span class="co">#&gt; 2 1.211701 6.743273 75.00126 0.3990190 28.13341  10.70668</span></span></code></pre></div>
-<p>Now, we can use the <code><a href="../reference/predict_spatial_parts.html">predict_spatial_parts()</a></code> function to explain the regression model using the SHAP method.</p>
+<p>The SHAP method is a model-agnostic method that explains the model’s predictions by attributing the prediction to each feature. However, as compared to the Break Down method, the SHAP method uses the idea of averaging the value of a variable’s attribution over all or many possible orderings. This has two main implications: the SHAP method is computationally more expensive, but its results are less sensitive to the order of the variables. This method provides additive feature attribution – thus, it works best for additive models (e.g., linear regression), and if the model is not additive, the SHAP values may not be meaningful.</p>
+<p>We can use the <code><a href="../reference/predict_spatial_parts.html">predict_spatial_parts()</a></code> function to explain the regression model using the SHAP method by setting the <code>type</code> parameter to <code>"shap"</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_psp_shap</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">100</span>,</span>
+<code class="sourceCode R"><span><span class="va">regr_psp_shap</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>                                      type <span class="op">=</span> <span class="st">"shap"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_psp_shap</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Spatial-SHAP_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p>The resulting maps show that the <code>popdens</code>, <code>coast</code>, and <code>ndvi</code> variables had no effect on the model’s predictions. The <code>dem</code> variable mostly influenced the results in the mountainous areas, while <code>lst_day</code> and <code>lst_night</code> had different effects for the south and north parts of Spain.</p>
 <p>For more explanation of the SHAP method, read the <a href="https://ema.drwhy.ai/shapley.html" class="external-link">“Shapley Additive Explanations (SHAP) for Average Attributions”</a> chapter from the <a href="https://ema.drwhy.ai/" class="external-link">Explanatory Model Analysis</a> book.</p>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
