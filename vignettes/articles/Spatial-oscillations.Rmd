@@ -63,5 +63,5 @@ regr_psp_os = predict_spatial_parts(regr_exp, predictors, maxcell = 500,
 panel(regr_psp_os)
 ```
 
-Similarly to most other explaination methods, the Oscillations methods are sensitive to the correlation or interactions between the predictors.
+Similarly to most other explanation methods, the Oscillations methods are sensitive to the correlation or interactions between the predictors.
 For more explanation of the Oscillations methods, read the ["Ceteris-paribus Oscillations"](https://ema.drwhy.ai/ceterisParibusOscillations.html) chapter from the [Explanatory Model Analysis](https://ema.drwhy.ai/) book. 
