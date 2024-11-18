@@ -18,7 +18,9 @@ Imports:
   terra,
   DALEX
 Suggests: 
+  DALEXtra,
   rpart, 
+  localModel,
   tinytest
 Config/Needs/website: rmarkdown
 Depends: 
