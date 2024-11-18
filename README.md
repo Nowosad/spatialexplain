@@ -8,6 +8,8 @@
 [![R-CMD-check](https://github.com/Nowosad/spatialexplain/workflows/R-CMD-check/badge.svg)](https://github.com/Nowosad/spatialexplain/actions/)
 [![Codecov test
 coverage](https://codecov.io/gh/Nowosad/spatialexplain/graph/badge.svg)](https://app.codecov.io/gh/Nowosad/spatialexplain)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of **spatialexplain** is to provide model agnostic tools for
