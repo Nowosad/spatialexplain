@@ -3,6 +3,7 @@
 <url><loc>/LICENSE-text.html</loc></url>
 <url><loc>/LICENSE.html</loc></url>
 <url><loc>/articles/An-introduction-to-spatial-explanations.html</loc></url>
+<url><loc>/articles/Spatial-LIME.html</loc></url>
 <url><loc>/articles/Spatial-SHAP.html</loc></url>
 <url><loc>/articles/Spatial-break-down.html</loc></url>
 <url><loc>/articles/Spatial-oscillations.html</loc></url>
@@ -10,6 +11,7 @@
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/news/index.html</loc></url>
+<url><loc>/reference/clas_exp.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
 <url><loc>/reference/predict_spatial_parts.html</loc></url>
 <url><loc>/reference/predict_spatial_surrogate.html</loc></url>
