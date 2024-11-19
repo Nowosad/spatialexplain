@@ -1,0 +1,66 @@
+---
+title: "Spatial SHAP"
+author: Jakub Nowosad
+date: "`r Sys.Date()`"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The **spatialexplain** package provides model agnostic tools for exploring and explaining spatial machine learning models. 
+This vignette shows a simple example of how to use it to explain a regression model with a few implementations of the Local Interpretable Model-agnostic Explanations (LIME) method.
+
+Let's start by attaching the necessary packages, reading the predictors raster, and loading the pre-trained regression model.
+
+```{r setup}
+#| message: false
+# attaching the necessary packages
+library(spatialexplain)
+library(terra)
+
+# reading the predictors raster
+predictors = rast("/vsicurl/https://github.com/Nowosad/IIIRqueR_workshop_materials/raw/refs/heads/main/data/predictors.tif")
+plot(predictors, axes = FALSE)
+
+# loading the pre-trained regression model
+data("regr_exp", package = "spatialexplain")
+regr_exp
+```
+
+The `regr_exp` object is a pre-trained regression model that was trained on the predictors raster.
+
+The main idea behind the LIME method is to approximate the complex model with a simpler one that is easier to interpret.
+The `predict_spatial_surrogate()` function explains the model using one of three implementations of the LIME method: `type = "localModel"`, `type = "iml"`, and `type = "lime"`.
+
+
+The default one is the `"localModel"` method.
+
+```{r}
+regr_lime1 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
+                                       type = "localModel")
+plot(regr_lime1)
+```
+
+The second one is the `"iml"` method.
+
+```{r}
+#| message: false
+regr_lime2 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
+                                       type = "iml")
+plot(regr_lime2)
+```
+
+The last one is the `"lime"` method; however, currently, it only works for explainers created with one of the supported models.
+
+```{r}
+#| error: true
+regr_lime3 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
+                                       type = "lime")
+```
+
+These different implementations use other algorithms to extract the interpretable features, have other sampling methods, and other ways of weighting. 
+For more explanation of the LIME method, read the ["Local Interpretable Model-agnostic Explanations (LIME)"](https://ema.drwhy.ai/LIME.html) chapter from the [Explanatory Model Analysis](https://ema.drwhy.ai/) book.
