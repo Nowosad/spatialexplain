@@ -32,3 +32,8 @@ expect_equivalent(terra::global(regr_psp_ose, "mean", na.rm = TRUE)[[1]][[6]],
 
 # check missing features
 expect_error(predict_spatial_parts(regr_exp, predictors_agg, maxcell = my_maxcell, type = "break_down_interactions"))
+
+# check classification model
+data("clas_exp", package = "spatialexplain")
+clas_psp_bd = predict_spatial_parts(clas_exp, predictors_agg, maxcell = my_maxcell)
+expect_equal(terra::nlyr(clas_psp_bd), 7)
