@@ -1,5 +1,5 @@
 ---
-title: "Spatial SHAP"
+title: "Spatial LIME"
 author: Jakub Nowosad
 date: "`r Sys.Date()`"
 ---
