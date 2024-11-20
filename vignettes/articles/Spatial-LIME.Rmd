@@ -54,10 +54,10 @@ regr_lime2 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
 plot(regr_lime2)
 ```
 
-The last one is the `"lime"` method; however, currently, it only works for explainers created with one of the supported models.
+The last one is the `"lime"` method; however, currently, it only works for explainers created with one of the supported models/modeling framework (e.g., **ranger** or **caret**).
 
 ```{r}
-#| error: true
+#| eval: false
 regr_lime3 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
                                        type = "lime")
 ```
