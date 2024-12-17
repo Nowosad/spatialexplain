@@ -26,3 +26,5 @@ Config/Needs/website: rmarkdown
 Depends: 
     R (>= 2.10)
 LazyData: false
+URL: https://jakubnowosad.com/spatialexplain
+BugReports: https://github.com/Nowosad/spatialexplain/issues
