@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spatialexplain</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
       <h1>Spatial break-down</h1>
                         <h4 data-toc-skip class="author">Jakub Nowosad</h4>
             
-            <h4 data-toc-skip class="date">2024-11-20</h4>
+            <h4 data-toc-skip class="date">2024-12-17</h4>
       
 
       <div class="d-none name"><code>Spatial-break-down.Rmd</code></div>
@@ -91,10 +91,10 @@
 <span><span class="co">#&gt;    popdens    coast      dem      ndvi  lst_day lst_night</span></span>
 <span><span class="co">#&gt; 1 0.000000 1.126301 85.90540 0.3656146 24.37792  12.64256</span></span>
 <span><span class="co">#&gt; 2 1.211701 6.743273 75.00126 0.3990190 28.13341  10.70668</span></span></code></pre></div>
-<p>Now, we can use the <code><a href="../reference/predict_spatial_parts.html">predict_spatial_parts()</a></code> function to explain the regression model using the Break Down method.</p>
+<p>Now, we can use the <code><a href="../reference/map_breakdown.html">map_breakdown()</a></code> function to explain the regression model using the Break Down method.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_psp_bd</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_parts.html">predict_spatial_parts</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
-<span>                                    type <span class="op">=</span> <span class="st">"break_down"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">regr_psp_bd</span> <span class="op">=</span> <span class="fu"><a href="../reference/map_breakdown.html">map_breakdown</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>                            type <span class="op">=</span> <span class="st">"break_down"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_psp_bd</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Spatial-break-down_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>The outcome is a set of raster layers that show the contribution of each predictor to the model prediction. The Break Down method quantifies how each explanatory variable contributes to the model’s average prediction by assessing the impact on the prediction as values of each variable are fixed in sequence. Each of the cells in the raster is the contribution of the predictors to the model prediction. Here, we can see that the intercept of the model is 15.1 for the whole area, and that the variables <code>popdens</code>, <code>coast</code>, and <code>ndvi</code> do not have any influence on the model prediction. On the other hand, the variables <code>dem</code>, <code>lst_day</code>, and <code>lst_night</code> affect the model prediction differently, depending on the location. For example, the <code>dem</code> variable negatively influences the model prediction in the mountainous areas – the higher the elevation, the lower the temperature. On the other hand, lower values of the <code>lst_day</code> and <code>lst_night</code> variables are associated with lower temperatures.</p>

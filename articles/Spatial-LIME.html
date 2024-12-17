@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spatialexplain</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
       <h1>Spatial LIME</h1>
                         <h4 data-toc-skip class="author">Jakub Nowosad</h4>
             
-            <h4 data-toc-skip class="date">2024-11-20</h4>
+            <h4 data-toc-skip class="date">2024-12-17</h4>
       
 
       <div class="d-none name"><code>Spatial-LIME.Rmd</code></div>
@@ -92,25 +92,23 @@
 <span><span class="co">#&gt; 1 0.000000 1.126301 85.90540 0.3656146 24.37792  12.64256</span></span>
 <span><span class="co">#&gt; 2 1.211701 6.743273 75.00126 0.3990190 28.13341  10.70668</span></span></code></pre></div>
 <p>The <code>regr_exp</code> object is a pre-trained regression model that was trained on the predictors raster.</p>
-<p>The main idea behind the LIME method is to approximate the complex model with a simpler one that is easier to interpret. The <code><a href="../reference/predict_spatial_surrogate.html">predict_spatial_surrogate()</a></code> function explains the model using one of three implementations of the LIME method: <code>type = "localModel"</code>, <code>type = "iml"</code>, and <code>type = "lime"</code>.</p>
+<p>The main idea behind the LIME method is to approximate the complex model with a simpler one that is easier to interpret. The <code><a href="../reference/map_lime.html">map_lime()</a></code> function explains the model using one of three implementations of the LIME method: <code>type = "localModel"</code>, <code>type = "iml"</code>, and <code>type = "lime"</code>.</p>
 <p>The default one is the <code>"localModel"</code> method.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_lime1</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_surrogate.html">predict_spatial_surrogate</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
-<span>                                       type <span class="op">=</span> <span class="st">"localModel"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">regr_lime1</span> <span class="op">=</span> <span class="fu"><a href="../reference/map_lime.html">map_lime</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>, type <span class="op">=</span> <span class="st">"localModel"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_lime1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Spatial-LIME_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<p>The second one is the <code>"iml"</code> method.</p>
+<p>The second one is the <code>"iml"</code> method<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;It requires the &lt;strong&gt;iml&lt;/strong&gt; package to be installed.&lt;/p&gt;"><sup>1</sup></a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_lime2</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_surrogate.html">predict_spatial_surrogate</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
-<span>                                       type <span class="op">=</span> <span class="st">"iml"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">regr_lime2</span> <span class="op">=</span> <span class="fu"><a href="../reference/map_lime.html">map_lime</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>, type <span class="op">=</span> <span class="st">"iml"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in private$aggregate(): Had to choose a smaller k</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">regr_lime2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Spatial-LIME_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>The last one is the <code>"lime"</code> method; however, currently, it only works for explainers created with one of the supported models/modeling framework (e.g., <strong>ranger</strong> or <strong>caret</strong>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regr_lime3</span> <span class="op">=</span> <span class="fu"><a href="../reference/predict_spatial_surrogate.html">predict_spatial_surrogate</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>,</span>
-<span>                                       type <span class="op">=</span> <span class="st">"lime"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">regr_lime3</span> <span class="op">=</span> <span class="fu"><a href="../reference/map_lime.html">map_lime</a></span><span class="op">(</span><span class="va">regr_exp</span>, <span class="va">predictors</span>, maxcell <span class="op">=</span> <span class="fl">500</span>, type <span class="op">=</span> <span class="st">"lime"</span><span class="op">)</span></span></code></pre></div>
 <p>These different implementations use other algorithms to extract the interpretable features, have other sampling methods, and other ways of weighting. For more explanation of the LIME method, read the <a href="https://ema.drwhy.ai/LIME.html" class="external-link">“Local Interpretable Model-agnostic Explanations (LIME)”</a> chapter from the <a href="https://ema.drwhy.ai/" class="external-link">Explanatory Model Analysis</a> book.</p>
+
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

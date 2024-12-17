@@ -13,8 +13,11 @@
 <url><loc>/news/index.html</loc></url>
 <url><loc>/reference/clas_exp.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/map_breakdown.html</loc></url>
+<url><loc>/reference/map_lime.html</loc></url>
+<url><loc>/reference/map_oscillations.html</loc></url>
+<url><loc>/reference/map_shap.html</loc></url>
 <url><loc>/reference/predict_spatial_parts.html</loc></url>
-<url><loc>/reference/predict_spatial_surrogate.html</loc></url>
 <url><loc>/reference/regr_exp.html</loc></url>
 <url><loc>/reference/spatialexplain-package.html</loc></url>
 </urlset>
