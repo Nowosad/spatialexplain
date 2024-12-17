@@ -34,23 +34,20 @@ regr_exp
 The `regr_exp` object is a pre-trained regression model that was trained on the predictors raster.
 
 The main idea behind the LIME method is to approximate the complex model with a simpler one that is easier to interpret.
-The `predict_spatial_surrogate()` function explains the model using one of three implementations of the LIME method: `type = "localModel"`, `type = "iml"`, and `type = "lime"`.
-
+The `map_lime()` function explains the model using one of three implementations of the LIME method: `type = "localModel"`, `type = "iml"`, and `type = "lime"`.
 
 The default one is the `"localModel"` method.
 
 ```{r}
-regr_lime1 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
-                                       type = "localModel")
+regr_lime1 = map_lime(regr_exp, predictors, maxcell = 500, type = "localModel")
 plot(regr_lime1)
 ```
 
-The second one is the `"iml"` method.
+The second one is the `"iml"` method^[It requires the **iml** package to be installed.]. 
 
 ```{r}
 #| message: false
-regr_lime2 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
-                                       type = "iml")
+regr_lime2 = map_lime(regr_exp, predictors, maxcell = 500, type = "iml")
 plot(regr_lime2)
 ```
 
@@ -58,8 +55,7 @@ The last one is the `"lime"` method; however, currently, it only works for expla
 
 ```{r}
 #| eval: false
-regr_lime3 = predict_spatial_surrogate(regr_exp, predictors, maxcell = 500,
-                                       type = "lime")
+regr_lime3 = map_lime(regr_exp, predictors, maxcell = 500, type = "lime")
 ```
 
 These different implementations use other algorithms to extract the interpretable features, have other sampling methods, and other ways of weighting. 

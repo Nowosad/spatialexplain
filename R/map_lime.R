@@ -1,4 +1,4 @@
-#' Predict spatial surrogate
+#' Predict LIME
 #'
 #' For each observation in the raster, the function returns an explanation of the model prediction using selected implementation of the LIME (Local Interpretable Model-agnostic Explanations) method.
 #'
@@ -15,10 +15,9 @@
 #' library(terra)
 #' predictors_agg = rast(system.file("raster/predictors_agg.tif", package = "spatialexplain"))
 #' data("regr_exp", package = "spatialexplain")
-#' regr_pss_lm = predict_spatial_surrogate(regr_exp, predictors_agg, maxcell = 20)
+#' regr_pss_lm = map_lime(regr_exp, predictors_agg, maxcell = 20)
 #' plot(regr_pss_lm)
-predict_spatial_surrogate = function(explainer, raster_obs, maxcell = 1000, ...,
-                                 type = "localModel"){
+map_lime = function(explainer, raster_obs, maxcell = 1000, ..., type = "localModel"){
   if (!requireNamespace("DALEXtra", quietly = TRUE)) {
     stop("The DALEXtra package is required for this function. Please install it and try again.", call. = FALSE)
   }
@@ -67,4 +66,9 @@ predict_spatial_surrogate = function(explainer, raster_obs, maxcell = 1000, ...,
   return(r_result)
 }
 
+#' @rdname map_lime
+#' @export
+predict_spatial_surrogate = function(...){
+  map_lime(...)
+}
 

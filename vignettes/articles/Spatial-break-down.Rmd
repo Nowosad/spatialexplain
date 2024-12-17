@@ -31,11 +31,11 @@ data("regr_exp", package = "spatialexplain")
 regr_exp
 ```
 
-Now, we can use the `predict_spatial_parts()` function to explain the regression model using the Break Down method.
+Now, we can use the `map_breakdown()` function to explain the regression model using the Break Down method.
 
 ```{r}
-regr_psp_bd = predict_spatial_parts(regr_exp, predictors, maxcell = 500,
-                                    type = "break_down")
+regr_psp_bd = map_breakdown(regr_exp, predictors, maxcell = 500,
+                            type = "break_down")
 plot(regr_psp_bd)
 ```
 
@@ -54,7 +54,7 @@ For more explanation of the Break Down method, read the ["Break-down Plots for A
 ```{r}
 #| echo: false
 #| eval: false
-regr_psp_bdi = predict_spatial_parts(regr_exp, predictors, maxcell = 500,
-                                    type = "break_down_interactions")
+regr_psp_bdi = map_breakdown(regr_exp, predictors, maxcell = 500,
+                             type = "break_down_interactions")
 plot(regr_psp_bdi)
 ```
