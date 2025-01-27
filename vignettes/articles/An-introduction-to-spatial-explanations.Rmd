@@ -71,16 +71,16 @@ regr_exp = explain(rpart_model,
 This explainer can be used to check various instance and dataset-level explanations of the model, such as partial dependence plots and feature importance.^[Read the ["Biecek, P., & Burzykowski, T. (2021). Explanatory model analysis: explore, explain, and examine predictive models. Chapman and Hall/CRC.](https://ema.drwhy.ai/) book for more details.]
 However, these methods usually do not inform us about the spatial distribution of the model predictions.
 This is where the **spatialexplain** package comes in.
-It has a function called `predict_spatial_parts()` that can be used to calculate the attributions of the model (Break Down, SHAP, or Oscillations explanations) for each observation in the raster.
-The function requires the explainer object and the predictor's raster.
-Additionally, as the calculation of the attributions can be computationally expensive, the function has a `maxcell` parameter that controls the number of cells in the raster that will be used to get the attributions.
+It has functions called `map_breakdown()`, `map_shap()`, `map_oscillations()`, and `map_lime()` that can be used to calculate the attributions of the model for each observation in the raster.
+These functions require the explainer object and the predictor's raster.
+Additionally, as the calculation of the attributions can be computationally expensive, the functions have a `maxcell` parameter that controls the number of cells in the raster that will be used to get the attributions.
 
 ```{r}
-regr_pps1 = predict_spatial_parts(regr_exp, predictors, maxcell = 500)
+regr_pps1 = map_breakdown(regr_exp, predictors, maxcell = 500)
 plot(regr_pps1)
 ```
 
-By default, the `predict_spatial_parts()` function calculates the Break Down attributions.
+The `map_breakdown()` function calculates the Break Down attributions.
 This method quantifies how each explanatory variable contributes to the model's average prediction (the 'intercept') by assessing the impact on the prediction as values of each variable are fixed in sequence.
 Each of the cells in the raster is colored according to the contribution of the predictors to the model prediction.
 Here, we can see that the intercept of the model is 15.1 for the whole area, and that the variables `popdens`, `coast`, and `ndvi` do not have any influence on the model prediction.
@@ -112,10 +112,10 @@ clas_exp = explain(rpart_model_clas,
                    y = temp_train$temp)
 ```
 
-Finally, we can calculate the attributions for the classification model using the `predict_spatial_parts()` function.
+Finally, we can calculate the attributions for the classification model using the `map_breakdown()` function.
 
 ```{r}
-clas_pps1 = predict_spatial_parts(clas_exp, predictors, maxcell = 500)
+clas_pps1 = map_breakdown(clas_exp, predictors, maxcell = 500)
 plot(clas_pps1)
 ```
 
