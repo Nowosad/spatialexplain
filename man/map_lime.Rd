@@ -2,12 +2,9 @@
 % Please edit documentation in R/map_lime.R
 \name{map_lime}
 \alias{map_lime}
-\alias{predict_spatial_surrogate}
 \title{Predict LIME}
 \usage{
 map_lime(explainer, raster_obs, maxcell = 1000, ..., type = "localModel")
-
-predict_spatial_surrogate(...)
 }
 \arguments{
 \item{explainer}{a model to be explained, preprocessed by the \code{\link[DALEX:explain]{DALEX::explain()}} function}

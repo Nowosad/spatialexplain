@@ -65,10 +65,3 @@ map_lime = function(explainer, raster_obs, maxcell = 1000, ..., type = "localMod
   names(r_result) = names(result)
   return(r_result)
 }
-
-#' @rdname map_lime
-#' @export
-predict_spatial_surrogate = function(...){
-  map_lime(...)
-}
-
