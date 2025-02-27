@@ -9,7 +9,7 @@ map_lime(explainer, raster_obs, maxcell = 1000, ..., type = "localModel")
 \arguments{
 \item{explainer}{a model to be explained, preprocessed by the \code{\link[DALEX:explain]{DALEX::explain()}} function}
 
-\item{raster_obs}{a raster object with the observations to be explained (predictors used in the model)}
+\item{raster_obs}{a SpatRaster object with the observations to be explained (predictors used in the model)}
 
 \item{maxcell}{the maximum number of cells in the raster. If the number of cells in the raster is greater than \code{maxcell}, the function will sample \code{maxcell} cells from the raster. By default 1000}
 
@@ -18,7 +18,7 @@ map_lime(explainer, raster_obs, maxcell = 1000, ..., type = "localModel")
 \item{type}{the type of the LIME method implementation. Possible values are: \code{"localModel"} (default), \code{"iml"}, and \code{"lime"}}
 }
 \value{
-A raster object with the same dimensions as \code{raster_obs}. The number of layers may vary depending on the type of the LIME method implementation
+A SpatRaster object with the same dimensions as \code{raster_obs}. The number of layers it has may vary depending on the type of the LIME method implementation
 }
 \description{
 For each observation in the raster, the function returns an explanation of the model prediction using selected implementation of the LIME (Local Interpretable Model-agnostic Explanations) method.
