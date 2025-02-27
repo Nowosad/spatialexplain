@@ -35,6 +35,7 @@ map_breakdown = function(explainer, raster_obs, maxcell = 1000, ...,
   x_df = as.data.frame(raster_obs, na.rm = FALSE)
   if (type %in% c("break_down")) {
     result = cbind(intercept = NA, x_df)
+    result[] = NA
   } else if (type == "break_down_interactions"){
     stop("'break_down_interactions' are not yet implemented. Please contact us if you need this feature",
          call. = FALSE)

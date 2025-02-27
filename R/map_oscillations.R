@@ -34,6 +34,7 @@ map_oscillations = function(explainer, raster_obs, maxcell = 1000, ...,
   }
   x_df = as.data.frame(raster_obs, na.rm = FALSE)
   result = x_df
+  result[] = NA
   for (i in seq_len(nrow(x_df))){
     if (stats::complete.cases(x_df[i, ])){
       pp = DALEX::predict_parts(explainer, new_observation = x_df[i, ], ..., N = N, type = type)
