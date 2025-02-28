@@ -16,7 +16,7 @@ map_breakdown(
 \arguments{
 \item{explainer}{a model to be explained, preprocessed by the \code{\link[DALEX:explain]{DALEX::explain()}} function}
 
-\item{raster_obs}{a raster object with the observations to be explained (predictors used in the model)}
+\item{raster_obs}{a SpatRaster object with the observations to be explained (predictors used in the model)}
 
 \item{maxcell}{the maximum number of cells in the raster. If the number of cells in the raster is greater than \code{maxcell}, the function will sample \code{maxcell} cells from the raster. By default 1000}
 
@@ -27,7 +27,7 @@ map_breakdown(
 \item{type}{the type of variable attributions. Either \code{break_down} or \code{break_down_interactions}}
 }
 \value{
-A raster object with the same dimensions as \code{raster_obs}. The number of layers equal to the number of variables in the model plus one.
+A SpatRaster object with the same dimensions as \code{raster_obs}. The number of layers in it is equal to the number of variables in the model plus one.
 }
 \description{
 This function calculates the attributions of the model
