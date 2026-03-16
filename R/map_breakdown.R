@@ -36,8 +36,32 @@ map_breakdown = function(explainer, raster_obs, maxcell = 1000, ...,
   if (type %in% c("break_down")) {
     result = cbind(intercept = NA, x_df)
   } else if (type == "break_down_interactions"){
-    stop("'break_down_interactions' are not yet implemented. Please contact us if you need this feature",
-         call. = FALSE)
+    var_names = names(x_df)
+    interaction_names = if (length(var_names) >= 2) {
+      utils::combn(var_names, 2, FUN = function(v) paste(v, collapse = ":"), simplify = TRUE)
+    } else {
+      character(0)
+    }
+    result = as.data.frame(matrix(NA_real_, nrow = nrow(x_df),
+                                  ncol = 1 + length(var_names) + length(interaction_names)))
+    names(result) = c("intercept", var_names, interaction_names)
+
+    # Inputs: x = vector of variable_name strings, vars = predictor names.
+    # Role: canonicalize interaction names to a consistent order.
+    # Example: vars = c("x1","x2"), x = "x2:x1" -> "x1:x2".
+    # Output: same length vector with normalized names.
+    normalize_interaction = function(x, vars) {
+      vapply(x, function(name) {
+        if (!grepl(":", name, fixed = TRUE)) return(name)
+        parts = strsplit(name, ":", fixed = TRUE)[[1]]
+        if (length(parts) != 2 || !all(parts %in% vars)) return(name)
+        parts = parts[order(match(parts, vars))]
+        paste(parts, collapse = ":")
+      }, character(1))
+    }
+    result = NULL
+    result_list = vector("list", nrow(x_df))
+    complete_rows = rep_len(TRUE, nrow(x_df))
   }
   for (i in seq_len(nrow(x_df))){
     if (stats::complete.cases(x_df[i, ])){
@@ -45,11 +69,40 @@ map_breakdown = function(explainer, raster_obs, maxcell = 1000, ...,
       pp_df = data.frame(contribution = pp$contribution,
                          variable_name = pp$variable_name,
                          label = pp$label)
+      if (type == "break_down_interactions") {
+        pp_df = pp_df[pp_df$variable_name != "" & !is.na(pp_df$variable_name), ]
+        pp_df$variable_name = normalize_interaction(pp_df$variable_name, var_names)
+      }
       pp_df = stats::reshape(pp_df, idvar = "label", timevar = "variable_name", direction = "wide")
       names(pp_df) = gsub("contribution.", "", names(pp_df))
-      result[i, ] = pp_df[, names(result)]
+      if (type == "break_down_interactions") {
+        if (ncol(pp_df) > 0) {
+          result_list[[i]] = as.numeric(pp_df[1, ])
+          names(result_list[[i]]) = names(pp_df)
+        }
+      } else {
+        result[i, ] = pp_df[, names(result)]
+      }
     } else {
-      result[i, ] = NA_real_
+      if (type == "break_down_interactions") {
+        complete_rows[i] = FALSE
+      } else {
+        result[i, ] = NA_real_
+      }
+    }
+  }
+  if (type == "break_down_interactions") {
+    result_names = sort(unique(unlist(lapply(result_list, names))))
+    result = as.data.frame(matrix(NA_real_, nrow = nrow(x_df),
+                                  ncol = length(result_names)))
+    names(result) = result_names
+    for (i in seq_len(nrow(x_df))) {
+      if (!complete_rows[i]) {
+        result[i, ] = NA_real_
+        next
+      }
+      if (length(result_list[[i]]) == 0) next
+      result[i, names(result_list[[i]])] = result_list[[i]]
     }
   }
   r_result = terra::rast(raster_obs, nlyrs = ncol(result))

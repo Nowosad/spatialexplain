@@ -12,8 +12,12 @@ expect_equal(terra::nlyr(regr_psp_bd), 7)
 expect_equivalent(terra::global(regr_psp_bd, "mean", na.rm = TRUE)[[1]][[1]],
                   15.10157, tolerance = 0.0001)
 
-# check missing features
-expect_error(map_breakdown(regr_exp, predictors_agg, maxcell = my_maxcell, type = "break_down_interactions"))
+# check break_down_interactions
+regr_psp_bd_int = map_breakdown(regr_exp, predictors_agg, maxcell = my_maxcell,
+                                type = "break_down_interactions")
+expect_true(inherits(regr_psp_bd_int, "SpatRaster"))
+expect_true(terra::nlyr(regr_psp_bd_int) >= 1)
+expect_true(all(nzchar(names(regr_psp_bd_int))))
 
 # check classification model
 data("clas_exp", package = "spatialexplain")
