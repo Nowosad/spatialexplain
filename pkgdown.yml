@@ -1,5 +1,5 @@
 pandoc: 3.1.3
-pkgdown: 2.1.1
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   articles/An-introduction-to-spatial-explanations: An-introduction-to-spatial-explanations.html
@@ -7,4 +7,4 @@ articles:
   articles/Spatial-LIME: Spatial-LIME.html
   articles/Spatial-oscillations: Spatial-oscillations.html
   articles/Spatial-SHAP: Spatial-SHAP.html
-last_built: 2025-02-28T12:48Z
+last_built: 2026-03-16T13:29Z
