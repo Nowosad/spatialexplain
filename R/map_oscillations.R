@@ -7,13 +7,13 @@
 #' See the documentation of the [`DALEX::predict_parts()`] function for more details.
 #'
 #' @param explainer a model to be explained, preprocessed by the [`DALEX::explain()`] function
-#' @param raster_obs a raster object with the observations to be explained (predictors used in the model)
+#' @param raster_obs a SpatRaster object with the observations to be explained (predictors used in the model)
 #' @param maxcell the maximum number of cells in the raster. If the number of cells in the raster is greater than `maxcell`, the function will sample `maxcell` cells from the raster. By default 1000
 #' @param ... other parameters that will be passed to [`iBreakDown::break_down()`]
 #' @param N the maximum number of observations used for calculation of attributions. By default 500
 #' @param type the type of variable attributions. Either `oscillations_uni` (default), `oscillations_emp`, `oscillations`
 #'
-#' @return A raster object with the same dimensions as `raster_obs`. The number of layers equal to the number of variables in the model.
+#' @return A SpatRaster object with the same dimensions as `raster_obs`. The number of layers in it is equal to the number of variables in the model.
 #' @export
 #'
 #' @references Lundberg, S. (2017). A unified approach to interpreting model predictions. arXiv preprint arXiv:1705.07874.
@@ -34,6 +34,7 @@ map_oscillations = function(explainer, raster_obs, maxcell = 1000, ...,
   }
   x_df = as.data.frame(raster_obs, na.rm = FALSE)
   result = x_df
+  result[] = NA
   for (i in seq_len(nrow(x_df))){
     if (stats::complete.cases(x_df[i, ])){
       pp = DALEX::predict_parts(explainer, new_observation = x_df[i, ], ..., N = N, type = type)
